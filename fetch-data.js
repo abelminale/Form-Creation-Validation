@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchUserData = async () => {
         // Define the API URL
         const apiUrl = 'https://jsonplaceholder.typicode.com/users';
-        
+
         // Select the Data Container Element
         const dataContainer = document.getElementById('api-data');
-        
+
         // Fetch Data Using try-catch
         try {
             const response = await fetch(apiUrl);
