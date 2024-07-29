@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registration-form');
     const feedbackDiv = document.getElementById('form-feedback');
@@ -10,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
 
+        const validationResult = validateForm(username, email, password);
+        displayFeedback(validationResult.isValid, validationResult.messages);
+    });
+
+    function validateForm(username, email, password) {
         let isValid = true;
         let messages = [];
 
@@ -31,7 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
             messages.push("Password must be at least 8 characters long.");
         }
 
-        // Display feedback
+        return { isValid, messages };
+    }
+
+    function displayFeedback(isValid, messages) {
         feedbackDiv.style.display = 'block';
         if (isValid) {
             feedbackDiv.textContent = "Registration successful!";
@@ -40,5 +47,5 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackDiv.innerHTML = messages.join('<br>');
             feedbackDiv.style.color = "#dc3545";
         }
-    });
+    }
 });
