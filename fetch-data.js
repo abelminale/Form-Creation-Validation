@@ -1,50 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the asynchronous operation
-    const getData = () => {
-        // Select the element to display the data
+    // Initialize the asynchronous function
+    const fetchUserData = () => {
+        // Define the API URL
+        const apiUrl = 'https://jsonplaceholder.typicode.com/users';
+        
+        // Select the Data Container Element
         const dataContainer = document.getElementById('api-data');
 
-        // Start the asynchronous fetch operation
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            const url = 'https://jsonplaceholder.typicode.com/users';
+        // Fetch Data Using try-catch
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', apiUrl, true);
 
-            xhr.open('GET', url, true);
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const users = JSON.parse(xhr.responseText);
+                
+                // Clear the Loading Message
+                dataContainer.innerHTML = '';
 
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve(JSON.parse(xhr.responseText));
-                } else {
-                    reject('Failed to load user data.');
-                }
-            };
+                // Create and Append User List
+                const userList = document.createElement('ul');
+                
+                users.forEach(user => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = user.name;
+                    userList.appendChild(listItem);
+                });
+                
+                dataContainer.appendChild(userList);
+            } else {
+                // Error Handling
+                dataContainer.innerHTML = '';
+                dataContainer.textContent = 'Failed to load user data.';
+            }
+        };
 
-            xhr.onerror = () => reject('Failed to load user data.');
-
-            xhr.send();
-        })
-        .then(users => {
-            // Clear the "Loading" message
+        xhr.onerror = () => {
+            // Error Handling
             dataContainer.innerHTML = '';
+            dataContainer.textContent = 'Failed to load user data.';
+        };
 
-            // Create and append the user list
-            const userList = document.createElement('ul');
-
-            users.forEach(user => {
-                const listItem = document.createElement('li');
-                listItem.textContent = user.name;
-                userList.appendChild(listItem);
-            });
-
-            dataContainer.appendChild(userList);
-        })
-        .catch(error => {
-            // Display error message
-            dataContainer.innerHTML = '';
-            dataContainer.textContent = error;
-        });
+        xhr.send();
     };
-
-    // Trigger the data fetching operation
-    getData();
+    
+    // Invoke fetchUserData on DOMContentLoaded
+    fetchUserData();
 });
